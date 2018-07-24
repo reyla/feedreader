@@ -37,28 +37,58 @@ $(function() {
                 expect(element.url.length).not.toBe(0);    
             });
             
-        })
+        });
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+        it('have defined names', function() {
+            allFeeds.forEach(element => {
+                expect(element.name).toBeDefined();
+                expect(element.name.length).not.toBe(0);
+            });
+        });
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
-
+    describe('The menu', function() {
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
-
-         /* TODO: Write a test that ensures the menu changes
+        it('is hidden by default', function() {
+            expect($(document.body).hasClass('menu-hidden')).toBe(true);
+        });
+         
+        /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
+        
+         
+        it('displays when menu icon is clicked and hides when clicked again', function() {
+            /* use jasmine-jquery to create a spyEvent for click action */
+            var spyEvent = spyOnEvent($('.menu-icon-link'), 'click');
+            /* pretend to click the menu icon */
+            $('.menu-icon-link').click();
+            expect('click').toHaveBeenTriggeredOn($('.menu-icon-link'));
+            expect(spyEvent).toHaveBeenTriggered();
+            /* check that the menu is displayed */
+            expect($(document.body).hasClass('menu-hidden')).toBe(false);
+            /* reset spy events */
+            spyEvent.reset();
+            expect('click').not.toHaveBeenTriggeredOn($('.menu-icon-link'));
+            expect(spyEvent).not.toHaveBeenTriggered();
+            /* reset hidden class */
+            $(document.body).toggleClass('menu-hidden');
+            /* check that the menu is hidden */
+            expect($(document.body).hasClass('menu-hidden')).toBe(true);
+        });
+    });
 
     /* TODO: Write a new test suite named "Initial Entries" */
 
@@ -75,4 +105,5 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+    
 }());
