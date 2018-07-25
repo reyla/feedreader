@@ -86,12 +86,11 @@ $(function() {
          */
         beforeEach(function(done) {
             // make sure the feeds are loaded first
-            loadFeed(0);
-            done();   
+            loadFeed(0, done);
         });
 
-        it('there is at least one entry in the feed', function() {  
-            expect($('.entry')).not.toBe(null);
+        it('there is at least one entry in the feed', function() { 
+            expect($('.feed .entry').length).toBeGreaterThan(1);
         });
     });
 
@@ -105,17 +104,16 @@ $(function() {
         
         beforeEach(function(done) {
             loadFeed(0, function() {
-                first = $('.feed').children().text();
-                done();
+                first = $('.feed').html();
+                loadFeed(1, function() {
+                    second = $('.feed').html();
+                    done();
+                });
             });
         });
 
-        it('content changes when new feeds are loaded', function(done) {
-            loadFeed(1, function() {
-                second = $('.feed').children().text();
-                expect(first).not.toEqual(second);
-                done();
-             });
+        it('content changes when new feeds are loaded', function() {
+            expect(first).not.toEqual(second);    
         });
     });
 }());
